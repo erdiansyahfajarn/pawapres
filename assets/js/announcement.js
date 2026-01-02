@@ -1,5 +1,9 @@
 const SHEET_NAME = "Announcements";
+const TITLE_COL = 1;
+const CONTENT_COL = 2;
 const DATE_COL = 3;
+const START_TIME_COL = 5;
+const END_TIME_COL = 6;
 const PER_PAGE = 2;
 
 let currentPage = 1;
@@ -7,10 +11,13 @@ let allData = [];
 
 /* ------------------ Mapper ------------------ */
 function mapAnnouncement(row) {
+  const dateStr = row.c[DATE_COL]?.f ?? "";
   return {
-    date: row.c[DATE_COL]?.v ?? "",
-    title: row.c[1]?.v ?? "",
-    content: row.c[2]?.v ?? ""
+    date: dateStringToLocalDate(dateStr),
+    start_time: row.c[START_TIME_COL]?.f ?? "",
+    end_time: row.c[END_TIME_COL]?.f ?? "",
+    title: row.c[TITLE_COL]?.v ?? "",
+    content: row.c[CONTENT_COL]?.v ?? ""
   };
 }
 
@@ -31,11 +38,28 @@ function renderAnnouncements(data) {
     el.innerHTML = `
       <h3>${item.title}</h3>
       <small>${item.date}</small>
+      <div>
+      <small>${item.start_time}</small>
+      <small>s/d</small>
+      <small>${item.end_time}</small>
+      </div>
       <p>${item.content}</p>
     `;
 
     container.appendChild(el);
   });
+}
+
+function dateStringToLocalDate(dateStr) {
+    if (dateStr == "") {
+        return dateStr;
+    }
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    }).format(date);
 }
 
 /* ------------------ Pagination ------------------ */
