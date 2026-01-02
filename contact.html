@@ -1,16 +1,41 @@
-<div id="contacts"></div>
-<script src="cms.js"></script>
-<script>
-(async () => {
-  const rows = await CMS.fetchSheet("Contacts");
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal Warga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="container">
+    <h2>🏘️ Portal Warga</h2>
 
-  document.getElementById("contacts").innerHTML = rows
-    .filter(r => r.c[3]?.v)
-    .map(r => `
-      <p>
-        <b>${r.c[0].v}</b> – ${r.c[1].v}<br>
-        📞 ${r.c[2].v}
-      </p>`)
-    .join("");
-})();
-</script>
+    <nav>
+      <a href="/">Beranda</a>
+      <a href="/rules.html">Tata Tertib</a>
+      <a href="/report.html">Lapor</a>
+      <a href="/contact.html">Kontak</a>
+    </nav>
+
+    <h2>Kontak</h2>
+    <div id="contacts"></div>
+  </div>
+
+  <script src="cms.js"></script>
+  <script>
+  (async () => {
+    const rows = await CMS.fetchSheet("Contacts");
+
+    document.getElementById("contacts").innerHTML = rows
+      .filter(r => r.c[3]?.v)
+      .map(r => `
+        <p>
+          <b>${r.c[0].v}</b> – ${r.c[1].v}<br>
+          📞 ${r.c[2].v}
+        </p>`)
+      .join("");
+  })();
+  </script>
+</body>
+</html>

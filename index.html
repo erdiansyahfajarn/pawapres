@@ -2,64 +2,57 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Portal Warga Perumahan</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    nav a { margin-right: 15px; }
-    .card { border: 1px solid #ddd; padding: 15px; margin-top: 15px; }
-  </style>
+  <title>Portal Warga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <h1>Portal Informasi Warga</h1>
+  <div class="container">
+    <h2>🏘️ Portal Warga</h2>
 
-  <nav>
-    <a href="index.html">Beranda</a>
-    <a href="rules.html">Tata Tertib</a>
-    <a href="report.html">Lapor Masalah</a>
-    <a href="contact.html">Kontak</a>
-  </nav>
+    <nav>
+      <a href="/">Beranda</a>
+      <a href="/rules.html">Tata Tertib</a>
+      <a href="/report.html">Lapor</a>
+      <a href="/contact.html">Kontak</a>
+    </nav>
 
-  <div class="card">
-    <h3>📢 Pengumuman</h3>
-    <ul>
-      <li>Kerja bakti Minggu, 10:00 WIB</li>
-      <li>Pembersihan saluran air blok B</li>
-    </ul>
+    <div id="news"></div>
+    <button id="more" class="button">Load more</button>
   </div>
-  <div id="news"></div>
-  <button id="more">Load more</button>
+
+  <script src="cms.js"></script>
+  <script>
+    let page = 1;
+    (async () => {
+      let rows = await CMS.fetchSheet("Announcements");
+      rows = sortByDate(rows, 3);
+
+      const admin = CMS.isAdmin();
+      const container = document.getElementById("news");
+
+      function render() {
+        paginate(rows, page).forEach(r => {
+          if (!r.c[4]?.v && !admin) return;
+
+          container.innerHTML += `
+            <div class="card">
+              <h3>${r.c[1].v}</h3>
+              <small>${r.c[3].v}</small>
+              <p>${r.c[2].v}</p>
+              ${!r.c[4].v ? '<span class="badge">Draft</span>' : ''}
+            </div>
+          `;
+        });
+      }
+
+      render();
+      document.getElementById("more").onclick = () => {
+        page++;
+        render();
+      };
+    })();
+  </script>
 </body>
 </html>
-
-<script src="cms.js"></script>
-<script>
-let page = 1;
-
-(async () => {
-  let rows = await CMS.fetchSheet("Announcements");
-  rows = sortByDate(rows, 3);
-
-  const admin = CMS.isAdmin();
-  const container = document.getElementById("news");
-
-  function render() {
-    paginate(rows, page).forEach(r => {
-      if (!r.c[4]?.v && !admin) return;
-
-      container.innerHTML += `
-        <div class="card">
-          <h3>${r.c[1].v}</h3>
-          <small>${r.c[3].v}</small>
-          <p>${r.c[2].v}</p>
-          ${!r.c[4].v ? "<em>(Draft)</em>" : ""}
-        </div>`;
-    });
-  }
-
-  render();
-  document.getElementById("more").onclick = () => {
-    page++;
-    render();
-  };
-})();
-</script>
