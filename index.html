@@ -26,40 +26,40 @@
       <li>Pembersihan saluran air blok B</li>
     </ul>
   </div>
-  <div class="card" id="news"></div>
+  <div id="news"></div>
+  <button id="more">Load more</button>
 </body>
 </html>
 
+<script src="cms.js"></script>
 <script>
-const SHEET_ID = "1K_dUKV4kyLxkku2R2yxebY5m-o-xn3Ld5d76G3EwyuI";
-const SHEET_NAME = "Announcements";
+let page = 1;
 
-const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+(async () => {
+  let rows = await CMS.fetchSheet("Announcements");
+  rows = sortByDate(rows, 3);
 
-fetch(URL)
-  .then(res => res.text())
-  .then(text => {
-    const json = JSON.parse(text.substring(47).slice(0, -2));
-    const rows = json.table.rows;
+  const admin = CMS.isAdmin();
+  const container = document.getElementById("news");
 
-    const container = document.getElementById("news");
+  function render() {
+    paginate(rows, page).forEach(r => {
+      if (!r.c[4]?.v && !admin) return;
 
-    rows.forEach(r => {
-      const active = r.c[4]?.v;
-      if (!active) return;
-
-      const title = r.c[1]?.v;
-      const content = r.c[2]?.v;
-      const date = r.c[3]?.v;
-
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <h3>${title}</h3>
-        <small>${date}</small>
-        <p>${content}</p>
-      `;
-      container.appendChild(card);
+      container.innerHTML += `
+        <div class="card">
+          <h3>${r.c[1].v}</h3>
+          <small>${r.c[3].v}</small>
+          <p>${r.c[2].v}</p>
+          ${!r.c[4].v ? "<em>(Draft)</em>" : ""}
+        </div>`;
     });
-  });
+  }
+
+  render();
+  document.getElementById("more").onclick = () => {
+    page++;
+    render();
+  };
+})();
 </script>

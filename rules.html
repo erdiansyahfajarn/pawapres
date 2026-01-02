@@ -1,0 +1,13 @@
+<div id="rules"></div>
+<script src="cms.js"></script>
+<script>
+(async () => {
+  const rows = await CMS.fetchSheet("Rules");
+  const admin = CMS.isAdmin();
+
+  document.getElementById("rules").innerHTML = rows
+    .filter(r => r.c[3]?.v || admin)
+    .map(r => `<h4>${r.c[1].v}</h4><p>${r.c[2].v}</p>`)
+    .join("");
+})();
+</script>

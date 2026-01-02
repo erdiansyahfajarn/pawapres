@@ -1,0 +1,16 @@
+<div id="contacts"></div>
+<script src="cms.js"></script>
+<script>
+(async () => {
+  const rows = await CMS.fetchSheet("Contacts");
+
+  document.getElementById("contacts").innerHTML = rows
+    .filter(r => r.c[3]?.v)
+    .map(r => `
+      <p>
+        <b>${r.c[0].v}</b> – ${r.c[1].v}<br>
+        📞 ${r.c[2].v}
+      </p>`)
+    .join("");
+})();
+</script>
