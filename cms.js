@@ -1,6 +1,6 @@
 const CMS = (() => {
   const SHEET_ID = "1K_dUKV4kyLxkku2R2yxebY5m-o-xn3Ld5d76G3EwyuI";
-  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  const CACHE_TTL = 1 * 60 * 1000; // 1 minutes
 
   function buildURL(sheet) {
     return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheet}`;
