@@ -1,0 +1,24 @@
+.announcement-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.announcement-card h3 {
+  margin: 0 0 4px;
+}
+
+.announcement-card small {
+  color: #777;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin-right: 6px;
+  padding: 6px 10px;
+}

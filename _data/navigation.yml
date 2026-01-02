@@ -1,0 +1,9 @@
+main:
+  - title: "Beranda"
+    url: /
+  - title: "Pengumuman"
+    url: /announcement/
+  - title: "Lapor Masalah"
+    url: /report/
+  - title: "About"
+    url: /about/
