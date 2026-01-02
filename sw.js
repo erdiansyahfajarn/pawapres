@@ -1,6 +1,5 @@
 const CACHE = "portal-warga-v1";
 const ASSETS = [
-  "assets/",
   "index.html",
   "style.css",
   "cms.js",
